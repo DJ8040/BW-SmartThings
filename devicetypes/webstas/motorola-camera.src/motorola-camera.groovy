@@ -14,11 +14,10 @@
  *  
  *          		INSTALLATION
  *	1. Login to the IDE https://graph.api.smartthings.com/device/list and click "New Device"
- *	2. enter a name for your camera and label in the "Device Network Id" make sure to enter the IP as hex use this site to convert it
- *	http://www.miniwebtool.com/ip-address-to-hex-converter/ it should look like this 0A020080 add port 80 (0050 in hex) at the end so 
- *	your device type network id looks like this 0A020080:0050
+ *	2. Enter a name for your camera and in the "Device Network Id" field set as the MAC Address of the camera (with no : colon's)
+ *	For example set as 000AE2179230
  *	3. Select your location and hub and then hit create
- *	4. go into the new device on the smartthings app and open the preferences then enter the ip (not in hex form ex 192.168.0.1)
+ *	4. go into the new device on the smartthings app and open the preferences then enter the ip, e.g. 192.168.2.40 and other info
  *	
  *	I created this for a more indepth install http://webstas.com/index.php/smartthings-motorola-camera-faqinstall
  *	
@@ -263,14 +262,4 @@ def poll() {
         take()
     ], 200)
 }
-def updated(){
-  	def iphex = convertIPtoHex(settings.ip)
-  	device.DeviceNetworkId = "$iphex:0050"
-  	log.info "Device Network Id set to ${iphex}:0050"
-}
 
-private String convertIPtoHex(ipAddress) { 
-    String hex = ipAddress.tokenize( '.' ).collect {  String.format( '%02x', it.toInteger() ) }.join()
-    return hex
-
-}
