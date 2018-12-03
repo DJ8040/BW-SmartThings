@@ -164,8 +164,12 @@ def parse(String description) {
 
   def map = stringToMap(description)
 
-  if (map.bucket && map.key) { //got a s3 pointer
-    putImageInS3(map)
+  if (map.tempImageKey) { //got a s3 pointer
+    try {
+    		storeTemporaryImage(descMap.tempImageKey, getPictureName())
+        } catch(Exception e) {
+ 		log.error e
+ 	}
   }
   else{
 
@@ -227,27 +231,7 @@ def takeimage(path) {
     log.debug hubAction
     hubAction
 }
-//send image to AMZ S3 bucket     
-def putImageInS3(map) {
-  log.debug "firing s3"
-    def s3ObjectContent
-    try {
-        def imageBytes = getS3Object(map.bucket, map.key + ".jpg")
-        if(imageBytes)
-        {
-            s3ObjectContent = imageBytes.getObjectContent()
-            def bytes = new ByteArrayInputStream(s3ObjectContent.bytes)
-            storeImage(getPictureName(), bytes)
-        }
-    }
-    catch(Exception e) {
-        log.error e
-    }
-  finally {
-    //Explicitly close the stream
-    if (s3ObjectContent) { s3ObjectContent.close() }
-  }
-}
+
 
 def parseDescriptionAsMap(description) {
 description.split(",").inject([:]) { map, param ->
