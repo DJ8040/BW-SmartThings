@@ -263,3 +263,14 @@ def poll() {
         take()
     ], 200)
 }
+def updated(){
+  	def iphex = convertIPtoHex(settings.ip)
+  	device.DeviceNetworkId = "$iphex:0050"
+  	log.info "Device Network Id set to ${iphex}:0050"
+}
+
+private String convertIPtoHex(ipAddress) { 
+    String hex = ipAddress.tokenize( '.' ).collect {  String.format( '%02x', it.toInteger() ) }.join()
+    return hex
+
+}
