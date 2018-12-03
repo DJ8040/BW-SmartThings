@@ -166,7 +166,7 @@ def parse(String description) {
 
   if (map.tempImageKey) { //got a s3 pointer
     try {
-    		storeTemporaryImage(descMap.tempImageKey, getPictureName())
+    		storeTemporaryImage(map.tempImageKey, getPictureName())
         } catch(Exception e) {
  		log.error e
  	}
